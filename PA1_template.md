@@ -38,7 +38,7 @@ ggplot(steps_per_day, aes(x = steps))+
   geom_histogram()
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-57-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
 
 ```r
 #3.
@@ -65,7 +65,7 @@ ggplot(average_daily_activity, aes(x = interval, y = steps)) +
   geom_point()
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-58-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
 ```r
 #2. 
@@ -109,7 +109,7 @@ ggplot(steps_per_day_complete, aes(steps))+
 ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-59-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
 
 ```r
 imputed_mean <- mean(steps_per_day_complete$steps)
@@ -140,7 +140,7 @@ PLOTS <- Week %>%
 PLOTS
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-60-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
 There are subtle but notable differences between the average activity patterns of a weekends vs. weekedays. Both show an initial peak of activity in the morning hours, but starts much earlier for weekdays (as early as 5:30). On average, activity is shifted to alter in the day on weekends, which can be illustrated by adding a trendline to the plots.
 
@@ -148,5 +148,5 @@ There are subtle but notable differences between the average activity patterns o
 PLOTS + geom_smooth()
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-61-1.png)<!-- -->
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
