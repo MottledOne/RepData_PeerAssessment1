@@ -11,7 +11,8 @@ output:
 ## Loading and preprocessing the data
 1. Load the data (i.e.read.csv())
 2. Process/transform the data (if necessary) into a format suitable for your analysis
-```{r, message = FALSE}
+
+```r
 library(tidyverse)
 
 # 1.
@@ -25,7 +26,8 @@ activity <- read_csv("activity.zip")
 1. Calculate the total number of steps taken per day
 2. If you do not understand the difference between a histogram and a barplot, research the difference between them. Make a histogram of the total number of steps taken each day
 3. Calculate and report the mean and median of the total number of steps taken per day
-```{r message = FALSE}
+
+```r
 #1. 
 steps_per_day <- activity %>%
   na.omit() %>% 
@@ -34,20 +36,25 @@ steps_per_day <- activity %>%
 #2.  
 ggplot(steps_per_day, aes(x = steps))+
   geom_histogram()
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-57-1.png)<!-- -->
+
+```r
 #3.
 ignored_mean <- mean(steps_per_day$steps)
 ignored_median <- median(steps_per_day$steps)
-
 ```
 
-The mean and median number steps per day are **`r as.character(ignored_mean)`** and **`r as.character(ignored_median)`**, respectively.
+The mean and median number steps per day are **10766.1886792453** and **10765**, respectively.
 
 
 
 ## What is the average daily activity pattern?
 1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
-```{r}
+
+```r
 #1. 
 average_daily_activity <- activity %>% 
   na.omit() %>% 
@@ -56,12 +63,17 @@ average_daily_activity <- activity %>%
 
 ggplot(average_daily_activity, aes(x = interval, y = steps)) +
   geom_point()
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-58-1.png)<!-- -->
+
+```r
 #2. 
 busiest_interval <- average_daily_activity %>% 
   filter(steps == max(steps)) %>% 
   .$interval
 ```
-The busiest time interval (maximum number of steps) is **`r as.character(busiest_interval)`**.
+The busiest time interval (maximum number of steps) is **835**.
 
 
 ## Imputing missing values
@@ -69,7 +81,8 @@ The busiest time interval (maximum number of steps) is **`r as.character(busiest
 2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
 3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
-```{r}
+
+```r
 #1.
 n_missing_values <- sum(is.na(activity))
 
@@ -90,20 +103,29 @@ steps_per_day_complete <- imputed_activity %>%
   
 ggplot(steps_per_day_complete, aes(steps))+
   geom_histogram()
+```
 
+```
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-59-1.png)<!-- -->
+
+```r
 imputed_mean <- mean(steps_per_day_complete$steps)
 imputed_median <- median(steps_per_day_complete$steps)
 ```
-The total number of missing values is **`r as.character(n_missing_values)`**.
+The total number of missing values is **2304**.
 
 Because there are no days with no data available at all, we cannot replace their missing values with the daily average. We instead replace those intervals with missing values with the mean step count for that 5-minute interval, previously calculated.
 
-When we impute the mean number of steps in a given 5-minute interval for missing values, the mean and median number of steps per day were found to be **`r as.character(imputed_mean)`** and **`r as.character(imputed_median)`**, respectively. These statistics differ from the those of the non-imputed data set by **`r as.character(imputed_mean - ignored_mean)`** and **`r as.character(imputed_median - ignored_median)`**, which represents a negligible impact. It is not suprising that there is no change in the calculated mean, since missing values were imputed with mean values. Because the median increases when the missing values are imputed with the mean, we can infer that the original distribution was slightly skewed towards higher values.
+When we impute the mean number of steps in a given 5-minute interval for missing values, the mean and median number of steps per day were found to be **10766.1886792453** and **10766.1886792453**, respectively. These statistics differ from the those of the non-imputed data set by **0** and **1.1886792452824**, which represents a negligible impact. It is not suprising that there is no change in the calculated mean, since missing values were imputed with mean values. Because the median increases when the missing values are imputed with the mean, we can infer that the original distribution was slightly skewed towards higher values.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 1. Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
-```{r}
+
+```r
 #1.
 Week <- imputed_activity %>% 
   mutate(day = as.factor(ifelse(weekdays(date) %in% c("Saturday", "Sunday"),"weekend", "weekday")))
@@ -118,8 +140,13 @@ PLOTS <- Week %>%
 PLOTS
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-60-1.png)<!-- -->
+
 There are subtle but notable differences between the average activity patterns of a weekends vs. weekedays. Both show an initial peak of activity in the morning hours, but starts much earlier for weekdays (as early as 5:30). On average, activity is shifted to alter in the day on weekends, which can be illustrated by adding a trendline to the plots.
-```{r message = FALSE}
+
+```r
 PLOTS + geom_smooth()
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-61-1.png)<!-- -->
 
